@@ -75,22 +75,24 @@ def askPlayAgain():
     else: return False
 
 def printResults():
+    print()
     for p in players:
         print(p.getName()," --- ",p.getBoard()," --- ", p.getHits())
 
 def printWinner():
     highScore = max(p.getHits() for p in players)
-    highPlayers = [p for p in players if p.getHits == highScore]
+    highPlayers = [p for p in players if p.getHits() == highScore]
   
     if len(highPlayers) == 1:
         print(f"THE WINNER IS: {highPlayers[0].getName()}!!!")
     else:
-        names = ", ".join(p.getName() for p in players)
+        names = ", ".join(p.getName() for p in highPlayers)
         print(f"ITS A TIE BETWEEEN: {names}")
 
 
 def gameRunner():
     while True:
+        players.clear()
         for p in range(askPlayerAmount()):
             game()
         printResults()
