@@ -1,12 +1,14 @@
 from random import randint
 SHOTS = 5
 HITCHANCE = 65 #chance of hitting target in percent
+players = []
 
 class Player:
-    def __init__(self,name,board):
+    def __init__(self,name,board,hits):
         self.name = name
         self.playerBoard = board
-
+        self.hits = hits
+    def getHits(self):return self.hits
     def getBoard(self):return self.playerBoard
     def getName(self):return self.name
     
@@ -56,11 +58,44 @@ def game():
             print("\nMiss")
         printBoard(board)
     print("You hit",hits,"of 5")
+    print("What's your name? ",end="")  
+    players.append(Player(input(),board,hits))
+
+def askPlayerAmount():
+    while True:
+        try:
+            print("How many players? ",end="")
+            return int(input())
+        except(ValueError):
+            print("INTEGERS ONLY")
+
+def askPlayAgain():
+    print("\nPlay again? (y/n) ",end="")
+    if input().capitalize() == "Y":return True
+    else: return False
+
+def printResults():
+    for p in players:
+        print(p.getName()," --- ",p.getBoard()," --- ", p.getHits())
+
+def printWinner():
+    highScore = max(p.getHits() for p in players)
+    highPlayers = [p for p in players if p.getHits == highScore]
+  
+    if len(highPlayers) == 1:
+        print(f"THE WINNER IS: {highPlayers[0].getName()}!!!")
+    else:
+        names = ", ".join(p.getName() for p in players)
+        print(f"ITS A TIE BETWEEEN: {names}")
+
 
 def gameRunner():
     while True:
-        game()
-        print("\nWant to play again? (y/n) ")
-        if (input() != "y"):
+        for p in range(askPlayerAmount()):
+            game()
+        printResults()
+        printWinner()
+        if(not askPlayAgain()):
             break
+
 gameRunner()
